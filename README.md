@@ -53,3 +53,19 @@ Run Maven:
 
 Copy `[dspace-release]/dspace/profiles-example.xml` to `[dspace-release]/dspace/profiles.xml`.  Edit connection details; Maven will pick up `profiles.xml` automatically.
 
+## Run local Ant tasks
+
+A custom build file defines install-specific Ant tasks: load extensions to metadata registry, etc.  When setting up your repo, copy the following files:
+
+`cp [dev]/src/main/config/build-riverrun.xml [dspace-release]/src/main/config/`
+`cp [dev]/src/assemble/assembly.xml [dspace-release]/src/assemble/`
+
+Run Maven, as usual:
+
+`cd [dspace-release]/dspace`
+`mvn package -Dconfigure-dspace=true`
+
+List local tasks:
+
+`cd [dspace-release]/dspace/target/[build-dir]`
+`ant -f build-riverrun.xml help`
