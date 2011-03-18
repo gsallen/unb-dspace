@@ -91,6 +91,16 @@ Common usage:
         <echo message="" />
         <echo message="load_registries  --> Load custom metadata registries into the database" />
         <echo message="" />
+        <echo message="init_data        --> Write sample data files to ${dspace.dir}/data"/>
+        <echo message="update_data      --> Update sample data"/>
+        <echo message="" />
+        <echo message="load_structure   --> Load sample set of communities, sub-communties, and"/>
+        <echo message="                     collections into the database as user ${mail.admin}" />
+        <echo message="" />
+        <echo message="Available parameters:" />
+        <echo message="" />
+        <echo message="-Duser=user@domain.org --> user that owns the imported data; default" />
+        <echo message="                           is ${mail.admin} (mail.admin in dspace.cfg)"/>
     </target>
 
 
@@ -107,5 +117,89 @@ Common usage:
             <arg line="-f '${dspace.dir}/config/registries/riverrun-metadata.xml'" />
         </java>
     </target>
+    
+    
+    <!-- ============================================================= -->
+    <!-- Install sample data                                           -->
+    <!-- ============================================================= -->
+    <target name="init_data" description="Install sample data">
+      
+      <mkdir dir="${dspace.dir}/data"/>
+      
+      <antcall target="copy_data"/>
+      
+      <echo>
+====================================================================
+Sample data has been installed in 
+
+${dspace.dir}/data
+====================================================================
+      </echo>
+      
+    </target>
+    
+    <!-- ============================================================= -->
+    <!-- Update sample data                                            -->
+    <!-- ============================================================= -->
+
+    <target name="update_data" description="Update sample data. (Will not clobber existing sample data.)">
+  
+      <move todir="${dspace.dir}/data.bak-${build.date}" failonerror="no">
+          <fileset dir="${dspace.dir}/data">
+              <include name="**/*" />
+          </fileset>
+      </move>
+
+        <echo>
+====================================================================
+ ${dspace.dir}/data was backed up to
+
+ ${dspace.dir}/data.bak-${build.date}
+
+ Please review this directory and delete it if it's no longer needed.
+====================================================================
+        </echo>
+        
+        <antcall target="copy_data"/>
+        
+        <echo>
+====================================================================
+ Updated sample data has been copied to 
+  
+ ${dspace.dir}/data
+====================================================================
+        </echo>
+    </target> 
+    
+    <!-- ============================================================= -->
+    <!-- Update sample data                                            -->
+    <!-- ============================================================= -->
+    <target name="copy_data" description="Copies sample data to install directory">
+      
+      <copy todir="${dspace.dir}/data" preservelastmodified="true" failonerror="no">
+        <fileset dir="data"/>
+      </copy>
+      
+    </target>
+
+
+    <!-- ==================================================================== -->
+    <!-- Load custom metadata schemas & elements registries into the database -->
+    <!-- ==================================================================== -->
+    <target name="load_structure" description="Load sample structure">
+      
+      <condition property="eperson" value="${user}" else="${mail.admin}">
+        <isset property="user"/>
+      </condition>
+      
+      <java classname="org.dspace.administer.StructBuilder" classpathref="class.path" fork="yes" failonerror="yes">
+        <sysproperty key="log4j.configuration" value="file:config/log4j-console.properties" />
+        <sysproperty key="dspace.log.init.disable" value="true" />
+        <sysproperty key="dspace.configuration" value="${config}" />
+        <arg line="-f '${dspace.dir}/data/structure.xml' -o '${dspace.dir}/data/structure-output.xml' -e ${eperson}" />
+      </java>
+      
+    </target>
 
 </project>
+

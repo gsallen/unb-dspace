@@ -1,0 +1,155 @@
+<import_structure>
+  <community>
+    <name path="engineering">Engineering</name>
+    <description>Sample data from the Faculty of Engineering community</description>
+    <intro>The faculty of engineering at the University of New Brunswick has been preparing graduates for success in their engineering careers since 1854, when UNB was the first university in Canada to introduce an engineering program. The faculty was ranked in the top 10 engineering schools in Canada by Knight School Rankings.</intro>
+    <collection>
+      <name path="geodesy-geomatics-lecture-notes">Geodesy &amp; Geomatics Lecture Notes</name>
+      <description>Sample data in the Geodesy &amp; Geomatics Lecture Notes collection</description>
+     </collection>
+  </community>
+  <community>
+    <name path="nursing">Nursing</name>
+    <description>Sample data from the Faculty of Nursing community</description>
+    <community>
+      <name path="faculty-publications">Faculty Publications</name>
+      <collection>
+        <name path="wuest-judith">Wuest, Judith</name>
+      </collection>
+    </community>
+  </community>
+  <community>
+    <name path="education">Education</name>
+    <description>Sample data from the Faculty of Education</description>
+    <community>
+      <name path="faculty-publications">Faculty Publications</name>
+      <collection>
+        <name path="anderson-kirk">Anderson, Kirk</name>
+      </collection>
+      <collection>
+        <name path="benjamin-amanda">Benjamin, Amanda</name>
+      </collection>
+      <collection>
+        <name path="brien-ken">Brien, Ken</name>
+      </collection>
+      <collection>
+        <name path="burge-liz">Burge, Liz</name>
+      </collection>
+      <collection>
+        <name path="chiasson-paul-emile">Chiasson, Paul-Emile</name>
+      </collection>
+      <collection>
+        <name path="christou-theodore">Christou, Theodore</name>
+      </collection>
+      <collection>
+        <name path="dicks-joe">Dicks, Joe</name>
+      </collection>
+      <collection>
+        <name path="domene-jose">Domene, Jose</name>
+      </collection>
+      <collection>
+        <name path="eyre-linda">Eyre, Linda</name>
+      </collection>
+      <collection>
+        <name path="hirschkorn-mark">Hirschkorn, Mark</name>
+      </collection>      
+      <collection>
+        <name path="hyslop-margison-emery">Hyslop-Margison, Emery</name>
+      </collection>
+      <collection>
+        <name path="keyes-beth">Keyes, Beth</name>
+      </collection>
+      <collection>
+        <name path="kristmanson-paula">Kristmanson, Paula</name>
+      </collection>
+      <collection>
+        <name path="macleod-marilyn">MacLeod, Marilyn</name>
+      </collection>      
+      <collection>
+        <name path="morrison-bill">Morrison, Bill</name>
+      </collection>      
+      <collection>
+        <name path="myers-sharon">Myers, Sharon</name>
+      </collection>      
+      <collection>
+        <name path="pazienza-jennifer">Pazienza, Jennifer</name>
+      </collection>      
+      <collection>
+        <name path="peterson-patricia">Peterson, Patricia</name>
+      </collection>      
+      <collection>
+        <name path="plaice-evie">Plaice, Evie</name>
+      </collection>      
+      <collection>
+        <name path="randall-lynn">Randall, Lynn</name>
+      </collection>      
+      <collection>
+        <name path="rose-ellen">Rose, Ellen</name>
+      </collection>      
+      <collection>
+        <name path="sears-alan">Sears, Alan</name>
+      </collection>      
+      <collection>
+        <name path="sherman-ann">Sherman, Ann</name>
+      </collection>      
+      <collection>
+        <name path="wagner-david">Wagner, David</name>
+      </collection>      
+      <collection>
+        <name path="whitty-pam">Whitty, Pam</name>
+      </collection>      
+      <collection>
+        <name path="willms-doug">Willms, Doug</name>
+      </collection>      
+    </community>
+    <community>
+      <name path="graduate-publications">Graduate Publications</name>
+      <collection>
+        <name path="etd">Education Electronic Theses and Dissertations</name>
+      </collection>
+    </community>
+  </community>
+  <community>
+    <name path="libraries">Libraries</name>
+    <description>Sample data from UNB Libraries</description>
+    <community>
+      <name path="engineering">Engineering</name>
+      <collection>
+        <name path="usenix-bsdcon-03">(USENIX) BSDCON '03</name>
+      </collection>
+      <collection>
+        <name path="usenix-fast-conference-2003">(USENIX) FAST Conference / 2003</name>
+      </collection>
+    </community>
+    <community>
+      <name path="law-library">Gerard V. La Forest Law Library</name>
+      <collection>
+        <name path="legere">Her Majesty the Queen and Allan Joseph Legere</name>
+      </collection>
+      <collection>
+        <name path="boundary">Newfoundland and Nova Scotia Boundary</name>
+      </collection>
+      <collection>
+        <name path="law-exams">UNB Law Exams</name>
+      </collection>
+    </community>
+    <community>
+      <name path="hil">Harriet Irving Library</name>
+      <collection>
+        <name path="data-liberation">Data Liberation Initiative (DLI) / Initiative de démocratisation des données (IDD)</name>
+      </collection>
+      <community>
+        <name path="etc">Electronic Text Centre</name>
+        <collection>
+          <name path="casta-2006">CaSTA 2006</name>
+        </collection>
+        <collection>
+          <name path="etd">ETD Development papers</name>
+        </collection>
+        <collection>
+          <name path="geoffrey-allen">Geoffrey Allen</name>
+        </collection>
+      </community>
+    </community>
+  </community>
+</import_structure>
