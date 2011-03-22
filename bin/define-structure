@@ -31,13 +31,13 @@ define('STRUCTURE_FILE', 'structure.xml');
  */
 $args = parse_arguments($argv);
 
-if (array_key_exists(ARG_HELP, $args)) {
+if (empty($args) or array_key_exists(ARG_HELP, $args)) {
   echo usage();
   exit();
 }
 
 foreach (array(ARG_DATA, ARG_OUTPUT) as $required_arg) {
-  if (! array_key_exists(ARG_PREFIX.$required_arg, $args) or ! isset($args[ARG_PREFIX.$required_arg])) {
+  if (! array_key_exists($required_arg, $args) or ! isset($args[$required_arg])) {
     echo PHP_EOL, 'Required argument missing: ', ARG_PREFIX.$required_arg, PHP_EOL;
     echo usage();
     exit(E_USER_ERROR);
@@ -55,13 +55,13 @@ if (! isset($element)) {
 $structure_dom = new DOMDocument();
 $structure_dom->appendChild(new DOMElement(ELEMENT_ROOT));
 
-build_structure($args[ARG_PREFIX.ARG_DATA], $structure_dom, $structure_dom->documentElement);
+build_structure($args[ARG_DATA], $structure_dom, $structure_dom->documentElement);
 
 
 /*
  * Write structure to output file
  */
-if (file_put_contents($args[ARG_PREFIX.ARG_OUTPUT], $structure_dom->saveXML()) === FALSE) {
+if (file_put_contents($args[ARG_OUTPUT], $structure_dom->saveXML()) === FALSE) {
   echo PHP_EOL, 'Failed to write structure to ', $args[ARG_PREFIX.ARG_OUTPUT], PHP_EOL;
   exit(E_ERROR);
 }
@@ -130,7 +130,8 @@ function parse_arguments($args) {
     }
 
     // Keep the current argument as a key
-    $key = $args[$arg_index];
+    // $key = $args[$arg_index];
+    $key = substr_replace($args[$arg_index], '', 0, strlen(ARG_PREFIX));
     
     // What if the key already exists?
     if (array_key_exists($key, $parsed_args)) {
