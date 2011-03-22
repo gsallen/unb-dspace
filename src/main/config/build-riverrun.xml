@@ -182,23 +182,34 @@ ${dspace.dir}/data
       
     </target>
 
+    <!-- ==================================================================== -->
+    <!--  Build community, collection import structure from sample data       -->
+    <!-- ==================================================================== -->
+    <target name="build_structure" description="Build community, collection import structure from sample data">
+      
+      <exec executable="define-structure" failonerror="yes">
+        <arg line="--data '${dspace.dir}/data' --output '${dspace.dir}/data/import-structure.xml'"/>
+      </exec>
+      
+    </target>
+
 
     <!-- ==================================================================== -->
     <!-- Load custom metadata schemas & elements registries into the database -->
     <!-- ==================================================================== -->
-    <target name="load_structure" description="Load sample structure">
+    <target name="load_structure" description="Load sample structure" depends="build_structure">
       
       <condition property="eperson" value="${user}" else="${mail.admin}">
         <isset property="user"/>
       </condition>
-      
+
       <java classname="org.dspace.administer.StructBuilder" classpathref="class.path" fork="yes" failonerror="yes">
         <sysproperty key="log4j.configuration" value="file:config/log4j-console.properties" />
         <sysproperty key="dspace.log.init.disable" value="true" />
         <sysproperty key="dspace.configuration" value="${config}" />
-        <arg line="-f '${dspace.dir}/data/structure.xml' -o '${dspace.dir}/data/structure-output.xml' -e ${eperson}" />
+        <arg line="-f '${dspace.dir}/data/import-structure.xml' -o '${dspace.dir}/data/imported-structure.xml' -e ${eperson}" />
       </java>
-      
+
     </target>
 
 </project>

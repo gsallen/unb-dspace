@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<dublin_core schema="dc">
+  <dcvalue element="contributor" qualifier="author" language="en">D.B. Thomson</dcvalue>
+  <dcvalue element="identifier" qualifier="citation" language="en">D.B. Thomson (1981-12-01). Introduction to Geodetic Astronomy . (Geodesy &amp; Geomatics Lecture Notes; 49).</dcvalue>
+  <dcvalue element="relation" qualifier="ispartof" language="en">Geodesy &amp; Geomatics Lecture Notes; 49</dcvalue>
+  <dcvalue element="title" qualifier="none" language="en">Introduction to Geodetic Astronomy</dcvalue>
+  <dcvalue element="type" qualifier="none" language="en">Lecture Notes</dcvalue>
+  <dcvalue element="date" qualifier="issued">1981-12-01</dcvalue>
+</dublin_core>

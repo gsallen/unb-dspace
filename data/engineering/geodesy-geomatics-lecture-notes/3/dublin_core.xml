@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<dublin_core schema="dc">
+  <dcvalue element="contributor" qualifier="author" language="en">E.J. Krakiwsky</dcvalue>
+  <dcvalue element="contributor" qualifier="author" language="en">D. E. Wells</dcvalue>
+  <dcvalue element="identifier" qualifier="citation" language="en">E.J. Krakiwsky, D. E. Wells (1971-05-01). Coordinate Systems in Geodesy. (Geodesy &amp; Geomatics Lecture Notes; 16).</dcvalue>
+  <dcvalue element="relation" qualifier="ispartof" language="en">Geodesy &amp; Geomatics Lecture Notes; 16</dcvalue>
+  <dcvalue element="title" qualifier="none" language="en">Coordinate Systems in Geodesy</dcvalue>
+  <dcvalue element="type" qualifier="none" language="en">Lecture Notes</dcvalue>
+  <dcvalue element="date" qualifier="issued">1971-05-01</dcvalue>
+</dublin_core>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<dublin_core schema="dc">
+  <dcvalue element="contributor" qualifier="author" language="en">P. Vaníček</dcvalue>
+  <dcvalue element="identifier" qualifier="citation" language="en">P. Vaníček (1974-08-01). Brief Outline of the Molodenskij Theory . (Geodesy &amp; Geomatics Lecture Notes; 23).</dcvalue>
+  <dcvalue element="relation" qualifier="ispartof" language="en">Geodesy &amp; Geomatics Lecture Notes; 23</dcvalue>
+  <dcvalue element="title" qualifier="none" language="en">Brief Outline of the Molodenskij Theory</dcvalue>
+  <dcvalue element="type" qualifier="none" language="en">Lecture Notes</dcvalue>
+  <dcvalue element="date" qualifier="issued">1974-08-01</dcvalue>
+</dublin_core>
