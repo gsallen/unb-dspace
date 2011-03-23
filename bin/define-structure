@@ -5,7 +5,9 @@
  * structure-builder script.  This needs to be re-written as a Java
  * class similiar to other administrative tools.
  */
-  
+ 
+require_once(getcwd() . '/parse-arguments.inc.php');
+
 /* 
  * Named constants
  */
@@ -55,7 +57,7 @@ if (! isset($element)) {
 $structure_dom = new DOMDocument();
 $structure_dom->appendChild(new DOMElement(ELEMENT_ROOT));
 
-build_structure($args[ARG_DATA], $structure_dom, $structure_dom->documentElement);
+build_structure($structure_dom, $structure_dom->documentElement, $args[ARG_DATA]);
 
 
 /*
@@ -72,7 +74,7 @@ if (file_put_contents($args[ARG_OUTPUT], $structure_dom->saveXML()) === FALSE) {
  * (one community/collection definition per structure file) are 
  * appended to the DOM representing overall import structure.
  */
-function build_structure($dir, $dom, $element) {
+function build_structure($dom, $element, $dir) {
   
   if (file_exists($dir . DIRECTORY_SEPARATOR . STRUCTURE_FILE)) {
     $structure_doc = new DOMDocument();
@@ -106,55 +108,10 @@ function build_structure($dir, $dom, $element) {
   }
   
   foreach (glob($dir .DIRECTORY_SEPARATOR. '*', GLOB_ONLYDIR) as $subdir) {
-    build_structure($subdir, $dom, $element);
+    build_structure($dom, $element, $subdir);
   }
   
   return;
-}
-
-/** 
- * Parse command-line arguments of the '--argname value' or 
- * '--arg_no_value' variety
- */
-function parse_arguments($args) {
-  array_shift($args);
-
-  $arg_index = 0;
-  $parsed_args = array();
-  
-  while ($arg_index < sizeof($args)) {
-    // We expect the next value in the list to be an argument name
-    if (strpos($args[$arg_index], ARG_PREFIX) === FALSE) {
-      echo usage();
-      exit(E_USER_ERROR);
-    }
-
-    // Keep the current argument as a key
-    // $key = $args[$arg_index];
-    $key = substr_replace($args[$arg_index], '', 0, strlen(ARG_PREFIX));
-    
-    // What if the key already exists?
-    if (array_key_exists($key, $parsed_args)) {
-      echo usage();
-      exit(E_USER_ERROR);
-    }
-    
-    // Nah, it's fine:
-    $parsed_args[$key] = NULL;
-    
-    // Increment the index & exit if we're at the end of the line
-    $arg_index++;
-    if ($arg_index >= sizeof($args)) {
-      break;
-    }
-    
-    if (strpos($args[$arg_index], ARG_PREFIX) === FALSE) {
-      // Assume it's a value for the current arg: store & increment
-      $parsed_args[$key] = $args[$arg_index++];
-    }
-    // Otherwise, let the next iteration handle the next named arg.
-  }
-  return $parsed_args;
 }
 
 /** 
