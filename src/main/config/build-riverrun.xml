@@ -138,9 +138,9 @@ ${dspace.dir}/data
       
     </target>
     
-    <!-- ============================================================= -->
-    <!-- Update sample data                                            -->
-    <!-- ============================================================= -->
+    <!-- ================================================================ -->
+    <!-- Backup existing sample data; copy new sample data from build dir -->
+    <!-- ================================================================ -->
 
     <target name="update_data" description="Update sample data. (Will not clobber existing sample data.)">
   
@@ -172,7 +172,7 @@ ${dspace.dir}/data
     </target> 
     
     <!-- ============================================================= -->
-    <!-- Update sample data                                            -->
+    <!-- Copy sample data to install dir                               -->
     <!-- ============================================================= -->
     <target name="copy_data" description="Copies sample data to install directory">
       
@@ -181,6 +181,23 @@ ${dspace.dir}/data
       </copy>
       
     </target>
+    
+    
+    <!-- =============================================================- -->
+    <!-- Load structure: build community/collection structure from      -->
+    <!-- sample data directories, load structure, map handles returned  -->
+    <!-- by loader to sample data directories.                          -->
+    <!-- ============================================================== -->
+    <target name="load_structure" description="Load sample communities and collections">
+      
+      <antcall target="build_structure"/>
+      
+      <antcall target="import_structure"/>
+      
+      <antcall target="map_handles"/>
+      
+    </target>
+    
 
     <!-- ==================================================================== -->
     <!--  Build community, collection import structure from sample data       -->
@@ -191,13 +208,23 @@ ${dspace.dir}/data
         <arg line="--data '${dspace.dir}/data' --output '${dspace.dir}/data/import-structure.xml'"/>
       </exec>
       
+      <echo>
+        
+====================================================================
+Community/collection import structure created from sample data:
+
+${dspace.dir}/data/import-structure.xml
+====================================================================
+
+      </echo>
+      
     </target>
 
 
     <!-- ==================================================================== -->
-    <!-- Load custom metadata schemas & elements registries into the database -->
+    <!-- Import community, collection structure built from sample data        -->
     <!-- ==================================================================== -->
-    <target name="load_structure" description="Load sample structure" depends="build_structure">
+    <target name="import_structure" description="Import community, collection structure built from sample data">
       
       <condition property="eperson" value="${user}" else="${mail.admin}">
         <isset property="user"/>
@@ -209,7 +236,47 @@ ${dspace.dir}/data
         <sysproperty key="dspace.configuration" value="${config}" />
         <arg line="-f '${dspace.dir}/data/import-structure.xml' -o '${dspace.dir}/data/imported-structure.xml' -e ${eperson}" />
       </java>
+      
+      <echo>
+        
+====================================================================
+Communties/collection defined in:
 
+${dspace.dir}/data/import-structure.xml
+
+have been imported to DSpace.  Community/collection handle IDs are
+defined in:
+
+${dspace.dir}/data/imported-structure.xml
+====================================================================
+
+      </echo>
+      
+    </target>
+    
+    <!-- ==================================================================== -->
+    <!-- Write community/collection handles created during structure import   -->
+    <!-- to corresponding sample data directories                             -->
+    <!-- ==================================================================== -->
+    <target name="map_handles">
+      
+      <exec executable="map-handles" failonerror="yes">
+        <arg line="--data '${dspace.dir}/data' --file '${dspace.dir}/data/imported-structure.xml'"/>
+      </exec>
+      
+      <echo>
+        
+====================================================================
+Each community/collection handle ID defined in:
+
+${dspace.dir}/data/imported-structure.xml
+
+has been written to a 'handle.txt' file in sample data directory 
+corresponding to the imported community/collection.
+====================================================================      
+
+      </echo>
+      
     </target>
 
 </project>

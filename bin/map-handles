@@ -4,7 +4,7 @@
  * @todo describe me
  */
  
-require_once(getcwd() . '/parse-arguments.inc.php');
+require_once(__DIR__. '/parse-arguments.inc.php');
 
 /* 
  * Named constants
