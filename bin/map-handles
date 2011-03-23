@@ -1,7 +1,8 @@
 #!/usr/bin/php
 <?php
 /** 
- * @todo describe me
+ * Write community/collection handles created during structure import
+ * to corresponding sample data directories
  */
  
 require_once(__DIR__. '/parse-arguments.inc.php');
@@ -59,20 +60,11 @@ $imported_xpath = new DOMXpath($imported_dom);
  */
 map_handles($imported_xpath, $imported_dom->documentElement, $args[ARG_DATA]);
 
-// starting in data dir
-// foreach dir with a structure.xml file
-// read find node=community/name or node=collection/name from structure.xml
-// parent defined? then parent = root or <imported_structure>
-// look up node=(community or collection)[name = $name] and node parent = parent
-// get handle 
-// write handle to handle.txt
-// parent = found node
-// recurse into subdirs
-
-// map-handles --data path/to/data/directory --file path/to/imported/structure/file
 
 /** 
- * @todo describe me
+ * Walk down imported structure document and data directory,
+ * reading handle ids from structure and writing handle files
+ * to corresponding directories
  */
 function map_handles($xpath, $element, $dir) {
   

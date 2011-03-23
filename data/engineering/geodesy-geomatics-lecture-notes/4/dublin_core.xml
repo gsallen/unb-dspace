@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<dublin_core schema="dc">
-  <dcvalue element="contributor" qualifier="author" language="en">E.E. Derenyi</dcvalue>
-  <dcvalue element="identifier" qualifier="citation" language="en">E.E. Derenyi  (1982-10-01). Photogrammetry for Civil and Forest Engineers. (Geodesy &amp; Geomatics Lecture Notes; 55).</dcvalue>
-  <dcvalue element="relation" qualifier="ispartof" language="en">Geodesy &amp; Geomatics Lecture Notes; 55</dcvalue>
-  <dcvalue element="title" qualifier="none" language="en">Photogrammetry for Civil and Forest Engineers</dcvalue>
-  <dcvalue element="type" qualifier="none" language="en">Lecture Notes</dcvalue>
-  <dcvalue element="date" qualifier="issued">1982-10-01</dcvalue>
-</dublin_core>

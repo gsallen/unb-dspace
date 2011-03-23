@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<dublin_core schema="dc">
-  <dcvalue element="contributor" qualifier="author" language="en">E.E. Derenyi</dcvalue>
-  <dcvalue element="identifier" qualifier="citation" language="en">E.E. Derenyi (1996-09-01). Photogrammetry: The Concepts. (Geodesy &amp; Geomatics Lecture Notes; 57).</dcvalue>
-  <dcvalue element="relation" qualifier="ispartof" language="en">Geodesy &amp; Geomatics Lecture Notes; 57</dcvalue>
-  <dcvalue element="title" qualifier="none" language="en">Photogrammetry: The Concepts</dcvalue>
-  <dcvalue element="type" qualifier="none" language="en">Lecture Notes</dcvalue>
-  <dcvalue element="date" qualifier="issued">1996-09-01</dcvalue>
-</dublin_core>

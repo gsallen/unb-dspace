@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<dublin_core schema="dc">
-  <dcvalue element="contributor" qualifier="author" language="en">W. Faig</dcvalue>
-  <dcvalue element="identifier" qualifier="citation" language="en">W. Faig (1976-06-01). Aerotriangulation . (Geodesy &amp; Geomatics Lecture Notes; 40).</dcvalue>
-  <dcvalue element="relation" qualifier="ispartof" language="en">Geodesy &amp; Geomatics Lecture Notes; 40</dcvalue>
-  <dcvalue element="title" qualifier="none" language="en">Aerotriangulation</dcvalue>
-  <dcvalue element="type" qualifier="none" language="en">Lecture Notes</dcvalue>
-  <dcvalue element="date" qualifier="issued">1976-06-01</dcvalue>
-</dublin_core>
