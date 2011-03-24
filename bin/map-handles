@@ -25,7 +25,7 @@ define('STRUCTURE_FILE', 'structure.xml');
 
 // Each data directory that corresponds to an imported community
 // or collection will have its handle written to a text file
-define('HANDLE_FILE', 'handle.txt');
+define('HANDLE_FILE', 'handle');
 
 /* 
  *  Parse & validate arguments

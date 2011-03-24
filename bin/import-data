@@ -22,10 +22,10 @@ define('ARG_EPERSON', 'eperson');
 define('DATA_ZIP_FILE', 'data.zip');
 
 // Collection handle id defined in text file
-define('HANDLE_FILE', 'handle.txt');
+define('HANDLE_FILE', 'handle');
 
 // Write result of import to a map file
-define('MAP_FILE', 'mapfile.txt');
+define('MAP_FILE', 'mapfile');
 
 /* 
  *  Parse & validate arguments
@@ -72,7 +72,7 @@ function import_data($dir, $eperson) {
                       "-c $handle_id ".         // collection 
                       "-s $dir ".               // path to source data
                       '-z '.DATA_ZIP_FILE.' '.  // name of data archive
-                      '-m $dir'.MAP_FILE;       // write import result to mapfile
+                      '-m ' .$dir.MAP_FILE;       // write import result to mapfile
                       
     // Run import; die on failure
     if (system($import_command) === FALSE) {

@@ -97,6 +97,9 @@ Common usage:
         <echo message="load_structure   --> Load sample set of communities, sub-communties, and"/>
         <echo message="                     collections into the database as user ${mail.admin}" />
         <echo message="" />
+        <echo message="load_data        --> Load sample data collections as user ${mail.admin}" />
+        <echo message="" />        
+        <echo message="" />
         <echo message="Available parameters:" />
         <echo message="" />
         <echo message="-Duser=user@domain.org --> user that owns the imported data; default" />
@@ -276,6 +279,23 @@ corresponding to the imported community/collection.
 ====================================================================      
 
       </echo>
+      
+    </target>
+
+    <!-- ==================================================================== -->
+    <!--  Load sample data in ${dspace.dir}/data into previously-imported     -->
+    <!--  communities and collections.                                        -->
+    <!-- ==================================================================== -->
+        
+    <target name="load_data">
+      
+      <condition property="eperson" value="${user}" else="${mail.admin}">
+        <isset property="user"/>
+      </condition>
+      
+      <exec executable="import-data" failonerror="yes">
+        <arg line="--data '${dspace.dir}/data' --eperson '${eperson}'"/>
+      </exec>
       
     </target>
 
