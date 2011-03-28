@@ -274,7 +274,7 @@ Each community/collection handle ID defined in:
 
 ${dspace.dir}/data/imported-structure.xml
 
-has been written to a 'handle.txt' file in sample data directory 
+has been written to a file named 'handle' in sample data directory 
 corresponding to the imported community/collection.
 ====================================================================      
 
