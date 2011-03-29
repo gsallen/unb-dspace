@@ -4,8 +4,6 @@
  * Write community/collection handles created during structure import
  * to corresponding sample data directories
  */
- 
-require_once(__DIR__. '/parse-arguments.inc.php');
 
 /* 
  * Named constants
@@ -13,6 +11,11 @@ require_once(__DIR__. '/parse-arguments.inc.php');
 
 // Argument names identified with a prefix
 define('ARG_PREFIX', '--');
+
+// Argument types
+define('OPTIONAL', '');
+define('OPTIONAL_VALUE', '::');
+define('REQUIRED_VALUE', ':');
 
 // Argument names
 define('ARG_HELP',    'help');
@@ -30,19 +33,33 @@ define('HANDLE_FILE', 'handle');
 /* 
  *  Parse & validate arguments
  */
-$args = parse_arguments($argv);
+$args = getopt(
+  '', // no short options
+  array(
+   ARG_HELP.OPTIONAL,
+   ARG_DATA.REQUIRED_VALUE,
+   ARG_FILE.REQUIRED_VALUE 
+  )
+);
 
-if (empty($args) or array_key_exists(ARG_HELP, $args)) {
+if (array_key_exists(ARG_HELP, $args)) {
   echo usage();
   exit();
 }
 
 foreach (array(ARG_DATA, ARG_FILE) as $required_arg) {
-  if (! array_key_exists($required_arg, $args) or ! isset($args[$required_arg])) {
+  if (! array_key_exists($required_arg, $args)) {
     echo PHP_EOL, 'Required argument missing: ', ARG_PREFIX.$required_arg, PHP_EOL;
     echo usage();
     exit(E_USER_ERROR);
   }
+}
+
+if (empty($args)) {
+  // getopt() does not return an array key for missing required
+  // arguments so this test comes last
+  echo usage();
+  exit();
 }
 
 /*
