@@ -2,7 +2,7 @@
 <document xmlns="http://di.tamu.edu/DRI/1.0/" xmlns:i18n="http://apache.org/cocoon/i18n/2.1" version="1.1">
 <body>
 <div id="file.news.div.news" n="news" rend="primary">
-<head>UNB Scholar Digital Repository</head>
+<head>RiverRun Digital Repository</head>
 <p>Welcome to RiverRun, the new repository for the UNB community to maintain and preserve digital copies of its scholarly papers. The repository is an important tool for not just preserving our organization&apos;s legacy, but it also facilitates the sharing of digital assets and advancing scholarly communication in an open access environment.</p>
 
 <p><hi rend="bold">The repository is currently under active development. We are seeking content for our collection from UNB faculty and the UNB community. If would would like to make a submission to RiverRun, or would more information on getting involved, please <xref target="/contact">contact us</xref>.</hi></p>
