@@ -120,6 +120,10 @@ public class ETDMSDisseminationCrosswalk extends SelfNamedPlugin
     // prefix of all DSpace Configuration entries.
     private static final String CONFIG_PREFIX = "crosswalk.etdms";
 
+    // prefix of Theses Canada identifier
+    // @todo remove this.  Crosswalks shouldn't generate metadata
+    private static final String TC_ID_PREFIX = "TC-UNB-";
+
     // XML schemaLocation fragment for this crosswalk, from config.
     private String schemaLocation = null;
 
@@ -333,7 +337,20 @@ public class ETDMSDisseminationCrosswalk extends SelfNamedPlugin
 
         // Add degree element, empty or not
         result.add(degreeElement);
-        
+
+
+        // Theses Canada identifier
+        // @todo remove TC ID generation; crosswalks shouldn't create metadata
+        String handle = item.getHandle();
+        if (handle != null) {
+            Element tcElement = new Element("identifier");
+            tcElement.addContent(TC_ID_PREFIX + handle.substring(handle.lastIndexOf("/")+1));
+            if (addSchema)
+                tcElement.setAttribute("schemaLocation", schemaLocation, XSI_NS);
+            result.add(tcElement);
+        }
+
+        // Return the list
         return result;
     }
 
