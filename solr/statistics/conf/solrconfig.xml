@@ -34,7 +34,7 @@
 
   <indexDefaults>
    <!-- Values here affect all index writers and act as a default unless overridden. -->
-    <useCompoundFile>false</useCompoundFile>
+    <useCompoundFile>true</useCompoundFile>
 
     <mergeFactor>10</mergeFactor>
     <!--
