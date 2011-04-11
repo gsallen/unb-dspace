@@ -8,7 +8,7 @@ Clone appropriate branch of the repo: `[git]/unb-dspace`
 
 Fetch DSpace source release: `[dspace-src]`
 
-### dspace/bin ###
+### dspace/bin 
 
 Copy or link custom scripts from `[git]/unb-dspace/dspace/bin` to `[dspace-src]/dspace/bin`
 
@@ -16,7 +16,7 @@ Copy or link custom scripts from `[git]/unb-dspace/dspace/bin` to `[dspace-src]/
 `import-data`
 `map-handles`
 
-### dspace/config ##
+### dspace/config
 
 Copy or link git-managed config files:
 
@@ -24,13 +24,13 @@ Copy or link git-managed config files:
 
 `ln -s [git]/unb-dspace/dspace/config [dspace-src]/dspace/config`
 
-### dspace/data ###
+### dspace/data 
 
 Link sample data set:
 
 `ln -s [git]/unb-dspace/dspace/data [dspace-src]/dspace/data`
 
-### dspace/modules ### 
+### dspace/modules 
 
 Remove existing (empty) webapp directory:
 
@@ -38,7 +38,7 @@ Remove existing (empty) webapp directory:
 
 `ln -s [git]/unb-dspace/dspace/modules/xmlui/src/main/webapp [dspace-src]/dspace/modules/xmlui/src/main/webapp`
 
-### dspace/src ###
+### dspace/src 
 
 Back up or delete Maven assembly file; copy or link modified version to include `dspace/data` in package:
 
@@ -50,7 +50,7 @@ Copy or link RiverRun build file (defines tasks for loading sample data):
 
 `cp [git]/unb-dspace/dspace/src/main/config/build-riverrun.xml [dspace-src]/dspace/src/main/config/build-riverrun.xml`
 
-### RiverRun extensions to DSpace ###
+## RiverRun extensions to DSpace
 
 Link riverrun-api project to DSpace source:
 
@@ -66,7 +66,7 @@ Currenly, only the OAI webapp depends on RiverRun extensions, so update the POM 
 
 See DSpace build cookbook for details: https://wiki.duraspace.org/display/DSPACE/BuildCookbook
 
-### Override default configuration settings
+## Maven configuration
 
 Customize config values with the default Maven profile defined in `settings.xml.default`.  
 
