@@ -4,46 +4,84 @@ Themes & other customizations for UNB's implementation of the DSpace repository.
 
 ## Set up development environment
 
-Clone appropriate branch of the repo: `[dev]/unb-dspace`
+Clone appropriate branch of the repo: `[git]/unb-dspace`
 
-Fetch DSpace release: `[dspace-release]`
+Fetch DSpace source release: `[dspace-src]`
 
-Back up default config files:
+### dspace/bin ###
 
-`mv [dspace-release]/dspace/config [dspace-release]/dspace/config_default` 
+Copy or link custom scripts from `[git]/unb-dspace/dspace/bin` to `[dspace-src]/dspace/bin`
 
-Link repository-managed config files to DSpace release directory:
+`define-structure`
+`import-data`
+`map-handles`
 
-`ln -s [dev]/unb-dspace/config [dspace-release]/dspace/config`
+### dspace/config ##
 
-Link themes, modules, etc. as needed:
+Copy or link git-managed config files:
 
-Remove existing (empty) webapp directory for symlink:
+`mv [dspace-src]/dspace/config [dspace-src]/dspace/config_default`
 
-`rmdir [dspace-release]/dspace/modules/xmlui/src/main/webapp`
+`ln -s [git]/unb-dspace/dspace/config [dspace-src]/dspace/config`
 
-Create new link:
+### dspace/data ###
 
-`ln -s [dev]/unb-dspace/modules/xmlui/src/main/webapp [dspace-release]/dspace/modules/xmlui/src/main/webapp`
+Link sample data set:
 
-... etc.
+`ln -s [git]/unb-dspace/dspace/data [dspace-src]/dspace/data`
+
+### dspace/modules ### 
+
+Remove existing (empty) webapp directory:
+
+`rmdir [dspace-src]/dspace/modules/xmlui/src/main/webapp`
+
+`ln -s [git]/unb-dspace/dspace/modules/xmlui/src/main/webapp [dspace-src]/dspace/modules/xmlui/src/main/webapp`
+
+### dspace/src ###
+
+Back up or delete Maven assembly file; copy or link modified version to include `dspace/data` in package:
+
+`cp [dspace-src]/dspace/src/assemble/assembly.xml [dspace-src]/dspace/src/assemble/default-assembly.xml`
+ 
+`cp [git]/unb-dspace/dspace/src/assemble/assembly.xml [dspace-src]/dspace/src/assemble/assembly.xml`
+
+Copy or link RiverRun build file (defines tasks for loading sample data):
+
+`cp [git]/unb-dspace/dspace/src/main/config/build-riverrun.xml [dspace-src]/dspace/src/main/config/build-riverrun.xml`
+
+### RiverRun extensions to DSpace ###
+
+Link riverrun-api project to DSpace source:
+
+`ln -s [git]/unb-dspace/riverrun-api [dspace-src]/riverrun-api`
+
+Copy modified POM files to build RiverRun extensions:
+
+`cp [git]/unb-dspace/dspace/pom.xml [dspace-src]/dspace/pom.xml`
+
+Currenly, only the OAI webapp depends on RiverRun extensions, so update the POM here, too:
+
+`cp [git]/unb-dspace/dspace/modules/oai/pom.xml [dspace-src]/dspace/modules/oai/pom.xml`
+
+See DSpace build cookbook for details: https://wiki.duraspace.org/display/DSPACE/BuildCookbook
 
 ### Override default configuration settings
 
 Customize config values with the default Maven profile defined in `settings.xml.default`.  
 
-`cp [dev]/unb-dspace/config/settings.xml.default $HOME/.m2/settings.xml`
+`cp [git]/unb-dspace/dspace/config/settings.xml.default $HOME/.m2/settings.xml`
 
 Edit properties defined in `$HOME/.m2/settings.xml`.  To use the settings in the build:
 
-`cd [dspace-release]/dspace`
+`cd [dspace-src]/dspace`
 `mvn package -Dconfigure-dspace=true`
 
 ### Override PostgreSQL connection information
 
 ** Maven 3 **
 
-If you're not connecting to PostgreSQL with default user account and password: edit the connection settings in the PostgreSQL profile defined in `[dspace-release]/dspace/pom.xml`
+If you're not connecting to PostgreSQL with default user account and password: edit the connection settings in the PostgreSQL profile defined in `[dspace-src]/dspace/pom.xml`
 
 Run Maven:
 
@@ -51,24 +89,18 @@ Run Maven:
 
 ** Maven 2 **
 
-Copy `[dspace-release]/dspace/profiles-example.xml` to `[dspace-release]/dspace/profiles.xml`.  Edit connection details; Maven will pick up `profiles.xml` automatically.
+Copy `[dspace-src]/dspace/profiles-example.xml` to `[dspace-src]/dspace/profiles.xml`.  Edit connection details; Maven will pick up `profiles.xml` automatically.
 
-## Run local Ant tasks
-
-A custom build file defines install-specific Ant tasks: load extensions to metadata registry, etc.  When setting up your repo, copy the following files:
-
-`cp [dev]/src/main/config/build-riverrun.xml [dspace-release]/src/main/config/`
-
-`cp [dev]/src/assemble/assembly.xml [dspace-release]/src/assemble/`
+## RiverRun Ant tasks
 
 Run Maven, as usual:
 
-`cd [dspace-release]/dspace`
+`cd [dspace-src]/dspace`
 
 `mvn package -Dconfigure-dspace=true`
 
-List local tasks:
+Get a list of RiverRun-specific tasks:
 
-`cd [dspace-release]/dspace/target/[build-dir]`
+`cd [dspace-src]/dspace/target/[build-dir]`
 
-`ant -f build-riverrun.xml help`
+`ant -f build-riverrun.xml`
