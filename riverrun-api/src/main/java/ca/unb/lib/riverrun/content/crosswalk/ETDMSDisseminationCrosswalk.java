@@ -1,8 +1,5 @@
 /*
  * ETDMSDisseminationCrosswalk.java
- *
- * @todo: add header & copyright notice
- *
  */
 package ca.unb.lib.riverrun.content.crosswalk;
 
@@ -20,9 +17,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.dspace.authorize.AuthorizeException;
+import org.dspace.content.Bitstream;
+import org.dspace.content.Bundle;
 import org.dspace.content.DCValue;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
@@ -37,31 +38,29 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 
 /**
- * @todo: clean up documentation
- *
- * Configurable QDC Crosswalk
+ * Configurable ETDMS Crosswalk
  * <p>
  * This class supports multiple dissemination crosswalks from DSpace
- * internal data to the Qualified Dublin Core XML format
- *  (see <a href="http://dublincore.org/">http://dublincore.org/</a>
+ * internal data to ETDMS XML
+ *
  * <p>
  * It registers multiple Plugin names, which it reads from
  * the DSpace configuration as follows:
  *
  * <h3>Configuration</h3>
- * Every key starting with <code>"crosswalk.qdc.properties."</code> describes a
- * QDC crosswalk.  Everything after the last period is the <em>plugin instance</em>,
+ * Every key starting with <code>"crosswalk.etdms.properties."</code> describes
+ * an ETDMS crosswalk.  Everything after the last period is the <em>plugin instance</em>,
  * and the value is the pathname (relative to <code><em>dspace.dir</em>/config</code>)
  * of the crosswalk configuration file.
  * <p>
  * You can have two aliases point to the same crosswalk,
  * just add two configuration entries with the same value, e.g.
  * <pre>
- *    crosswalk.qdc.properties.QDC = xwalk/qdc.properties
- *    crosswalk.qdc.properties.default = xwalk/qdc.properties
+ *    crosswalk.etdms.properties.thesescanada = xwalk/etdms.properties
+ *    crosswalk.etdms.properties.synergies = xwalk/etdms.properties
  * </pre>
- * The first line creates a plugin with the name <code>"QDC"</code>
- * which is configured from the file <em>dspace-dir</em><code>/xwalk/qdc.properties</code>.
+ * The first line creates a plugin with the name <code>"thesescanada"</code>
+ * which is configured from the file <em>dspace-dir</em><code>/xwalk/etdms.properties</code>.
  * <p>
  * Since there is significant overhead in reading the properties file to
  * configure the crosswalk, and a crosswalk instance may be used any number
@@ -74,23 +73,20 @@ import org.jdom.Namespace;
  * XML Namespaces: all XML namespace prefixes used in the XML fragments below
  * <em>must</em> be defined in the configuration as follows.  Add a line of
  * the form: <pre>
- *  crosswalk.qdc.namespace.{NAME}.{prefix} = {namespace-URI}</pre>
- * e.g. for the namespaces <code>dc</code> and <code>dcterms</code>
- * in the plugin named <code>QDC</code>, add these lines:
- * <pre>crosswalk.qdc.namespace.QDC.dc = http://purl.org/dc/elements/1.1/
- * crosswalk.qdc.namespace.QDC.dcterms = http://purl.org/dc/terms/</pre>
+ *  crosswalk.etdms.namespace.{NAME}.{prefix} = {namespace-URI}</pre>
  *
  * <p>
  * Finally, you need to declare an XML Schema URI for the plugin, with
  * a line of the form <pre>
- *  crosswalk.qdc.schema.{NAME} = {schema-URI}</pre>
+ *  crosswalk.etdms.schema.{NAME} = {schema-URI}</pre>
  * for example,
- * <pre>crosswalk.qdc.schemaLocation.QDC  = \
- *  http://purl.org/dc/terms/ \
- *  http://dublincore.org/schemas/xmls/qdc/2003/04/02/qualifieddc.xsd</pre>
+ * <pre>crosswalk.etdms.schemaLocation.thesescanada  = \
+ *   http://www.ndltd.org/standards/metadata/etdms/1.0/ \
+ *   http://www.ndltd.org/standards/metadata/etdms/1.0/etdms.xsd</pre>
  *
+ * Based on org.dspace.content.crosswalk.QDCCrosswalk.java by
  * @author Larry Stone
- * @version $Revision: 3761 $
+ * 
  */
 public class ETDMSDisseminationCrosswalk extends SelfNamedPlugin
         implements DisseminationCrosswalk {
@@ -107,9 +103,9 @@ public class ETDMSDisseminationCrosswalk extends SelfNamedPlugin
     // the XML namespaces from config file for this name.
     private Namespace namespaces[] = null;
 
-    // ETDMS Namespace
+    // OAI ETDMS Namespace
     private static final Namespace ETDMS_NS =
-            Namespace.getNamespace("etdms", "http://www.ndltd.org/standards/metadata/etdms/1.0/");
+            Namespace.getNamespace("oai_etdms", "http://www.ndltd.org/standards/metadata/etdms/1.0/");
 
     // sentinal: done init?
     private boolean inited = false;
@@ -349,6 +345,70 @@ public class ETDMSDisseminationCrosswalk extends SelfNamedPlugin
                 tcElement.setAttribute("schemaLocation", schemaLocation, XSI_NS);
             result.add(tcElement);
         }
+        // end TC ID hack
+
+        // Theses Canada, Synergies identifer: primary bitstream URL
+        //
+        // @fixme: bitstreams are examined for filenames ending in PDF.
+        // The first matching filename is assumed to be the primary
+        // document for the item & an 'identifier' element is created
+        // with a URL to the document.
+        //
+        // Needless to say, this is too rough to be reliable, but is
+        // more or less echoed from the U. Man. class -- it's no more
+        // broken than it was.
+        //
+        // Also, the file identified in this bitstream may or may not
+        // correspond to the MIME type & extent information, (possibly)
+        // used by this crosswalk, that's fetched from item-level
+        // metadata.
+        //
+        // Needs to be fixed or removed: see Bugzilla #32
+
+        // Get bundles of bitstreams
+        Bundle[] bundles = item.getBundles();
+        List<Bundle> bundleList = Arrays.asList(bundles);
+        Iterator i = bundleList.iterator();
+
+        // Look for ORIGINAL bundle
+        Bundle originalBundle = null;
+        while (i.hasNext()) {
+            Bundle bundle = (Bundle) i.next();
+            if (bundle.getName().equalsIgnoreCase("ORIGINAL")) {
+                originalBundle = bundle;
+                break;
+            }
+        }
+
+        // Found it.
+        if (originalBundle != null) {
+            Bitstream[] bitstreams = originalBundle.getBitstreams();
+            List<Bitstream> bitstreamList = Arrays.asList(bitstreams);
+            /*Iterator*/ i = bitstreamList.iterator();
+
+            Pattern p = Pattern.compile(".+\\.(?i)pdf\\s*$");
+
+            while (i.hasNext()) {
+                Bitstream bitstream = (Bitstream) i.next();
+                Matcher m = p.matcher(bitstream.getName());
+
+                if (m.matches()) {
+                    // Build a URL, of questionable utility, to bitstream...
+                    String bitstreamURL =
+                            ConfigurationManager.getProperty("dspace.url") +
+                            "/bitstream/" +
+                            item.getHandle() + "/" +
+                            bitstream.getSequenceID() + "/" +
+                            bitstream.getName();
+
+                    Element bsElement = new Element("identifier");
+                    bsElement.addContent(bitstreamURL);
+                    result.add(bsElement);
+                }
+            }
+        }
+        // end Theses Canada, Synergies bitstream URL hack.
+        // We now return to scheduled programming.
 
         // Return the list
         return result;
