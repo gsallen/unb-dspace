@@ -324,7 +324,19 @@
 	<message key="xmlui.ItemExportDownloadReader.auth_header">This export archive is restricted.</message>
 	<message key="xmlui.ItemExportDownloadReader.auth_message">The export archive you are attempting to access is a restricted resource and requires credentials to view. Please login below to access the export archive.</message>
 
+
 	<!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            Sherpa/RoMEO Aspect
+
+	!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+
+        <!-- Item-view policy options -->
+        <message key="xmlui.SherpaRomeo.PolicyOptions.publisher_policies">Publishers' Self-Archiving Policies</message>
+        <message key="xmlui.SherpaRomeo.PolicyOptions.show_policies">Check publishers' copyright and self-archiving policies</message>
+
+
+        <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		
 		                EPerson Aspect
 		

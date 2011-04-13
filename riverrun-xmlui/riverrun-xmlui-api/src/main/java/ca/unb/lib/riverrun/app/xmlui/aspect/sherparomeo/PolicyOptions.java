@@ -15,6 +15,7 @@ import org.dspace.app.xmlui.cocoon.AbstractDSpaceTransformer;
 import org.dspace.app.xmlui.utils.DSpaceValidity;
 import org.dspace.app.xmlui.utils.HandleUtil;
 import org.dspace.app.xmlui.utils.UIException;
+import org.dspace.app.xmlui.wing.Message;
 import org.dspace.app.xmlui.wing.WingException;
 import org.dspace.app.xmlui.wing.element.Body;
 import org.dspace.app.xmlui.wing.element.Division;
@@ -32,12 +33,12 @@ public class PolicyOptions extends AbstractDSpaceTransformer implements Cacheabl
 {
     private static final Logger log = Logger.getLogger(PolicyOptions.class);
     
-    
-    /* @fixme: move these into messages.xml */
-    private static final String T_PUBLISHER_POLICIES =
-            "Publishers' Self-Archiving Policies";
-    private static final String T_SHOW_POLICIES =
-            "Check publishers' copyright and self-archiving policies";
+    /** Language strings */
+    private static final Message T_PUBLISHER_POLICIES =
+        message("xmlui.SherpaRomeo.PolicyOptions.publisher_policies");
+
+    private static final Message T_SHOW_POLICIES =
+        message("xmlui.SherpaRomeo.PolicyOptions.show_policies");
     
 	/** Cached validity object */
 	private SourceValidity validity = null;
