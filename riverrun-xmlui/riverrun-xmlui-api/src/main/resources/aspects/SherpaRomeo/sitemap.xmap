@@ -49,8 +49,8 @@ and searching the repository.
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
     <map:components>
         <map:transformers>
-            <map:transformer name="PolicyOptions" src="org.dspace.app.xmlui.aspect.sherparomeo.PolicyOptions"/>
-            <map:transformer name="PolicyViewer" src="org.dspace.app.xmlui.aspect.sherparomeo.PolicyViewer"/>
+            <map:transformer name="PolicyOptions" src="ca.unb.lib.riverrun.app.xmlui.aspect.sherparomeo.PolicyOptions"/>
+            <map:transformer name="PolicyViewer"  src="ca.unb.lib.riverrun.app.xmlui.aspect.sherparomeo.PolicyViewer"/>
         </map:transformers>
 
         <map:matchers default="wildcard">

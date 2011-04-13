@@ -335,6 +335,9 @@
         <message key="xmlui.SherpaRomeo.PolicyOptions.publisher_policies">Publishers' Self-Archiving Policies</message>
         <message key="xmlui.SherpaRomeo.PolicyOptions.show_policies">Check publishers' copyright and self-archiving policies</message>
 
+        <!-- Policy view -->
+        <message key="xmlui.SherpaRomeo.PolicyViewer.trail">View Policies</message>
+
 
         <!--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		

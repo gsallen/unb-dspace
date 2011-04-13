@@ -5,9 +5,7 @@ package ca.unb.lib.riverrun.app.xmlui.aspect.sherparomeo;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.StringWriter;
 import java.sql.SQLException;
-import java.util.List;
 
 import org.apache.cocoon.caching.CacheableProcessingComponent;
 import org.apache.cocoon.util.HashUtil;
@@ -27,12 +25,6 @@ import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.DCValue;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
-import org.dspace.content.crosswalk.CrosswalkException;
-import org.dspace.content.crosswalk.DisseminationCrosswalk;
-import org.dspace.core.PluginManager;
-import org.jdom.Element;
-import org.jdom.Text;
-import org.jdom.output.XMLOutputter;
 import org.xml.sax.SAXException;
 
 /**
@@ -44,26 +36,17 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
     private static final Logger log = Logger.getLogger(PolicyViewer.class);
     
     /** Language strings */
-    private static final Message T_dspace_home =
+    private static final Message T_DSPACE_HOME =
         message("xmlui.general.dspace_home");
     
-    private static final Message T_trail =
+    private static final Message T_ITEM_TRAIL =
         message("xmlui.ArtifactBrowser.ItemViewer.trail");
-    
-    private static final Message T_show_simple =
-        message("xmlui.ArtifactBrowser.ItemViewer.show_simple");
-    
-    private static final Message T_show_full =
-        message("xmlui.ArtifactBrowser.ItemViewer.show_full");
-    
-    private static final Message T_head_parent_collections =
-        message("xmlui.ArtifactBrowser.ItemViewer.head_parent_collections");
+
+    private static final Message T_POLICY_TRAIL =
+        message("xmlui.SherpaRomeo.PolicyViewer.trail");
     
 	/** Cached validity object */
 	private SourceValidity validity = null;
-	
-	/** XHTML crosswalk instance */
-	private DisseminationCrosswalk xHTMLHeadCrosswalk = null;
 	
     /**
      * Generate the unique caching key.
@@ -127,7 +110,7 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
             return;
         Item item = (Item) dso;
 
-        // Set the page title
+
         String title = getItemTitle(item);
 
         if (title != null)
@@ -135,42 +118,12 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
         else
             pageMeta.addMetadata("title").addContent(item.getHandle());
 
-        pageMeta.addTrailLink(contextPath + "/",T_dspace_home);
+        pageMeta.addTrailLink(contextPath + "/", T_DSPACE_HOME);
         HandleUtil.buildHandleTrail(item,pageMeta,contextPath);
-        pageMeta.addTrail().addContent(T_trail);
         
-        // Metadata for <head> element
-        if (xHTMLHeadCrosswalk == null)
-        {
-            xHTMLHeadCrosswalk = (DisseminationCrosswalk) PluginManager.getNamedPlugin(
-              DisseminationCrosswalk.class, "XHTML_HEAD_ITEM");
-        }
-
-        // Produce <meta> elements for header from crosswalk
-        try
-        {
-            List l = xHTMLHeadCrosswalk.disseminateList(item);
-            StringWriter sw = new StringWriter();
-
-            XMLOutputter xmlo = new XMLOutputter();
-            xmlo.output(new Text("\n"), sw);
-            for (int i = 0; i < l.size(); i++)
-            {
-                Element e = (Element) l.get(i);
-                // FIXME: we unset the Namespace so it's not printed.
-                // This is fairly yucky, but means the same crosswalk should
-                // work for Manakin as well as the JSP-based UI.
-                e.setNamespace(null);
-                xmlo.output(e, sw);
-                xmlo.output(new Text("\n"), sw);
-            }
-            pageMeta.addMetadata("xhtml_head_item").addContent(sw.toString());
-        }
-        catch (CrosswalkException ce)
-        {
-            // TODO: Is this the right exception class?
-            throw new WingException(ce);
-        }
+        // Add trail items for referring item & current view
+        pageMeta.addTrailLink(contextPath + "/handle/" + item.getHandle(), T_ITEM_TRAIL);
+        pageMeta.addTrail().addContent(T_POLICY_TRAIL);
     }
 
     /**
@@ -185,13 +138,15 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
         if (!(dso instanceof Item))
             return;
         Item item = (Item) dso;
-        
+
         // Build the policy viewer division.
         Division division = body.addDivision("policy-view","primary");
         division.setHead(item.getHandle());
 
         Para testPara = division.addPara();
         testPara.addContent("This is a test paragraph.");
+
+        division.addPara().addContent("This is another message");
 
     }
 
