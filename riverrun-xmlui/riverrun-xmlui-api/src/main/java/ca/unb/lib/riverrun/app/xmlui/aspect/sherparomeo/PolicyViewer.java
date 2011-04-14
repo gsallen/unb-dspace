@@ -6,6 +6,9 @@ package ca.unb.lib.riverrun.app.xmlui.aspect.sherparomeo;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.cocoon.caching.CacheableProcessingComponent;
 import org.apache.cocoon.util.HashUtil;
@@ -25,6 +28,7 @@ import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.DCValue;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
+import org.dspace.core.ConfigurationManager;
 import org.xml.sax.SAXException;
 
 /**
@@ -44,9 +48,34 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
 
     private static final Message T_POLICY_TRAIL =
         message("xmlui.SherpaRomeo.PolicyViewer.trail");
+
+    private static final Message T_TITLE =
+        message("xmlui.SherpaRomeo.PolicyViewer.title");
+
+    private static final Message T_NO_INFORMATION =
+        message("xmlui.SherpaRomeo.PolicyViewer.no_information");
+
+    private static final Message T_CONTACT_US =
+        message("xmlui.SherpaRomeo.PolicyViewer.contact_us");
+
+
+
     
 	/** Cached validity object */
 	private SourceValidity validity = null;
+
+    /**
+     * Sherpa/RoMEO configuration
+     */
+    private static final String CONFIG_PREFIX = "sherpa.romeo";
+    private static final String PARAM_ISSN = "issn";
+
+    // DSpace metadata element that stores ISSN
+    private static String issnElement = null;
+
+    static {
+        issnElement = ConfigurationManager.getProperty(CONFIG_PREFIX + "." + PARAM_ISSN);
+    }
 	
     /**
      * Generate the unique caching key.
@@ -110,14 +139,7 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
             return;
         Item item = (Item) dso;
 
-
-        String title = getItemTitle(item);
-
-        if (title != null)
-            pageMeta.addMetadata("title").addContent(title);
-        else
-            pageMeta.addMetadata("title").addContent(item.getHandle());
-
+        // Modify trail links for Policy view
         pageMeta.addTrailLink(contextPath + "/", T_DSPACE_HOME);
         HandleUtil.buildHandleTrail(item,pageMeta,contextPath);
         
@@ -141,28 +163,54 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
 
         // Build the policy viewer division.
         Division division = body.addDivision("policy-view","primary");
-        division.setHead(item.getHandle());
+        division.setHead(T_TITLE);
 
-        Para testPara = division.addPara();
-        testPara.addContent("This is a test paragraph.");
-
-        division.addPara().addContent("This is another message");
-
+        // Fetch ISSN
+        String issn = getItemISSN(item);
+        
+        if (issn == null) {
+            division.addPara().addContent(T_NO_INFORMATION);
+            division.addPara().addContent(T_CONTACT_US);
+        }
+        else {
+            // We have an ISSN.
+            division.addPara().addContent(issn);
+        }
     }
 
     /**
-     * Obtain the item's title.
+     * Obtain the item's ISSN
      */
-    public static String getItemTitle(Item item)
+    public static String getItemISSN(Item item)
     {
-        DCValue[] titles = item.getDC("title", Item.ANY, Item.ANY);
+        String issn = null;
+        
+        if (issnElement == null) {
+            log.warn(CONFIG_PREFIX + "." + PARAM_ISSN + " not defined");
+            return issn;
+        }
 
-        String title;
-        if (titles != null && titles.length > 0)
-            title = titles[0].value;
-        else
-            title = null;
-        return title;
+        // We expect issnElement to be [schema].[element]{.[qualifier]?}
+        List<String> issnParts = Arrays.asList(issnElement.split("\\."));
+
+        String schema = null;
+        String name = null;
+        String qualifier = null;
+
+        Iterator i = issnParts.iterator();
+        if (i.hasNext())
+            schema = (String) i.next();
+        if (i.hasNext())
+            name = (String) i.next();
+        if (i.hasNext())
+            qualifier = (String) i.next();
+
+        DCValue[] issns = item.getMetadata(schema, name, qualifier, Item.ANY);
+
+        if (issns != null && issns.length > 0)
+            issn = issns[0].value;
+        
+        return issn;
     }
 
     
