@@ -338,7 +338,8 @@
         <!-- Policy view -->
         <message key="xmlui.SherpaRomeo.PolicyViewer.trail">View Policies</message>
         <message key="xmlui.SherpaRomeo.PolicyViewer.title">Self-Archiving Policies</message>
-        <message key="xmlui.SherpaRomeo.PolicyViewer.no_information">We are unable to provide information about the self-archiving policies of this item's publisher.</message>
+        <message key="xmlui.SherpaRomeo.PolicyViewer.no_information">No information is available about the self-archiving policies of this item's publisher.</message>
+        <message key="xmlui.SherpaRomeo.PolicyViewer.failed">An error occurred while retrieving information about this item's publisher.</message>
         <message key="xmlui.SherpaRomeo.PolicyViewer.contact_us">Please contact us for assistance.</message>
 
 
