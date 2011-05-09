@@ -15,6 +15,7 @@ public class Query {
     private static final Logger log = Logger.getLogger(Query.class);
 
     // SHERPA/RoMEO API URL, defined in DSpace config file
+    // @todo: set this in S/R transformer & pass in
     private static final String sherpaRomeoURL;
 
     // Query parameters
@@ -24,7 +25,11 @@ public class Query {
     // Response from S/R; a JAXB-generated class
     private Romeoapi response = null;
 
+
+
+
     // Fetch S/R API URL from DSpace config
+    // @todo: config this
     static {
        sherpaRomeoURL = ConfigurationManager.getProperty("sherpa.romeo.url");
     }

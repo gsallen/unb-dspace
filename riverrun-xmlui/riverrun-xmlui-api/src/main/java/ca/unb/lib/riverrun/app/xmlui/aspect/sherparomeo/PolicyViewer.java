@@ -1,6 +1,3 @@
-/*
- * PolicyViewer.java
- */
 package ca.unb.lib.riverrun.app.xmlui.aspect.sherparomeo;
 
 import ca.unb.lib.riverrun.app.xmlui.aspect.sherparomeo.jaxb.Condition;
@@ -15,14 +12,12 @@ import ca.unb.lib.riverrun.app.xmlui.aspect.sherparomeo.jaxb.Romeoapi;
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.cocoon.caching.CacheableProcessingComponent;
 import org.apache.cocoon.util.HashUtil;
 import org.apache.excalibur.source.SourceValidity;
 import org.apache.log4j.Logger;
-import org.dspace.app.xmlui.cocoon.AbstractDSpaceTransformer;
 import org.dspace.app.xmlui.utils.DSpaceValidity;
 import org.dspace.app.xmlui.utils.HandleUtil;
 import org.dspace.app.xmlui.utils.UIException;
@@ -33,16 +28,14 @@ import org.dspace.app.xmlui.wing.element.Division;
 import org.dspace.app.xmlui.wing.element.PageMeta;
 import org.dspace.app.xmlui.wing.element.Para;
 import org.dspace.authorize.AuthorizeException;
-import org.dspace.content.DCValue;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
-import org.dspace.core.ConfigurationManager;
 import org.xml.sax.SAXException;
 
 /**
  * @todo: write me
  */
-public class PolicyViewer extends AbstractDSpaceTransformer implements CacheableProcessingComponent {
+public class PolicyViewer extends SherpaRomeoTransformer implements CacheableProcessingComponent {
 
     private static final Logger log = Logger.getLogger(PolicyViewer.class);
 
@@ -59,8 +52,8 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
     private static final Message T_TITLE =
                                  message("xmlui.SherpaRomeo.PolicyViewer.title");
 
-    private static final Message T_FAILED =
-                                 message("xmlui.SherpaRomeo.PolicyViewer.failed");
+    private static final Message T_ERROR =
+                                 message("xmlui.SherpaRomeo.PolicyViewer.error");
 
     private static final Message T_NO_INFORMATION =
                                  message("xmlui.SherpaRomeo.PolicyViewer.no_information");
@@ -70,27 +63,6 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
 
     /** Cached validity object */
     private SourceValidity validity = null;
-
-    /** DSpace metadata element that stores ISSN */
-    private static String issnElement = null;
-
-    /** S/R responses */
-    /** @todo move this into Query? */
-    public enum Outcome {
-        failed, notFound, singleJournal, manyJournals, excessJournals,
-        publisherFound, uniqueZetoc;
-    }
-
-    /** S/R archiving permission */
-    /** @todo: move this into Query? */
-    public enum Permission {
-        can, cannot, restricted, unclear, unknown
-    }
-
-
-    static {
-        issnElement = ConfigurationManager.getProperty("sherpa.romeo.issn");
-    }
 
     /**
      * Generate the unique caching key.
@@ -226,43 +198,6 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
     }
 
     /**
-     * Obtain the item's ISSN
-     */
-    public static String getItemISSN(Item item) {
-        String issn = null;
-
-        if (issnElement == null) {
-            throw new IllegalStateException("Missing DSpace configuration keys for SHERPA/RoMEO queries: sherpa.romeo.issn");
-        }
-
-        // We expect issnElement to be [schema].[element]{.[qualifier]?}
-        List<String> issnParts = Arrays.asList(issnElement.split("\\."));
-
-        String schema = null;
-        String name = null;
-        String qualifier = null;
-
-        Iterator i = issnParts.iterator();
-        if (i.hasNext()) {
-            schema = (String) i.next();
-        }
-        if (i.hasNext()) {
-            name = (String) i.next();
-        }
-        if (i.hasNext()) {
-            qualifier = (String) i.next();
-        }
-
-        DCValue[] issns = item.getMetadata(schema, name, qualifier, Item.ANY);
-
-        if (issns != null && issns.length > 0) {
-            issn = issns[0].value;
-        }
-
-        return issn;
-    }
-
-    /**
      * Recycle
      */
     @Override
@@ -272,7 +207,7 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
     }
 
     private void displayFailed(Division division) throws WingException {
-        division.addPara(T_FAILED);
+        division.addPara(T_ERROR);
         division.addPara(T_CONTACT_US);
     }
 
@@ -288,16 +223,19 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
         Division journalDivision = division.addDivision("single-journal");
 
         journalDivision.setHead(journal.getJtitle());
-        journalDivision.addPara("ISSN: " + journal.getIssn());
+        journalDivision.addPara("journal-issn", null).addContent(
+                    message("xmlui.SherpaRomeo.PolicyViewer.Journal.issn").parameterize(journal.getIssn())
+                );
 
         List<Publisher> publisherList = response.getPublishers().getPublisher();
 
         if (publisherList.isEmpty()) {
-            journalDivision.addPara("No publishers found.");
+            journalDivision.addPara(message("xmlui.SherpaRomeo.PolicyViewer.Publisher.not_found"));
         }
         else {
-            journalDivision.addPara("Information found for " + publisherList.size() + " publisher(s).");
-
+            /// journalDivision.addPara("Information found for " + publisherList.size() + " publisher(s).");
+            journalDivision.addPara(message("xmlui.SherpaRomeo.PolicyViewer.Publisher.found").parameterize(publisherList.size()));
+            
             Iterator i = publisherList.iterator();
             while (i.hasNext()) {
 
@@ -311,8 +249,21 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
 
                 // Preprint policy
                 Division preprintPolicy = publDivision.addDivision("preprint-policy");
-                preprintPolicy.setHead("Author's Pre-print");
-                preprintPolicy.addPara(getPermissionDescription(publ.getPreprints().getPrearchiving()));
+                preprintPolicy.setHead(message("xmlui.SherpaRomeo.PolicyViewer.Preprint.title"));
+
+                // Map pre-archiving permission to value in Permission enum
+                try {
+                    preprintPolicy.addPara(
+                            Permission.valueOf(
+                                  publ.getPreprints().getPrearchiving()
+                              ).getMessage()
+                           );
+                }
+                catch (IllegalArgumentException ex) {
+                    // Boo.
+                    log.error("Unknown SHERPA/RoMEO permission", ex);
+                    preprintPolicy.addPara(T_ERROR);
+                }
 
                 // One or more lists of preprint conditions
                 List<Prerestrictions> prerestrictionsList = publ.getPreprints().getPrerestrictions();
@@ -327,7 +278,7 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
                         List<Prerestriction> prerestriction = prerestrictions.getPrerestriction();
                         Iterator ipre = prerestriction.iterator();
                         while (ipre.hasNext()) {
-                            Prerestriction pre = (Prerestriction) i.next();
+                            Prerestriction pre = (Prerestriction) ipre.next();
                             preprintConditions.addItem(pre.getvalue());
                         }
                     }
@@ -335,8 +286,21 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
 
                // Postprint policy
                 Division postprintPolicy = publDivision.addDivision("postprint-policy");
-                postprintPolicy.setHead("Author's Post-print");
-                postprintPolicy.addPara(getPermissionDescription(publ.getPostprints().getPostarchiving()));
+                postprintPolicy.setHead(message("xmlui.SherpaRomeo.PolicyViewer.Postprint.title"));
+
+                // Map post-archiving permission to value in Permission enum
+                try {
+                    postprintPolicy.addPara(
+                            Permission.valueOf(
+                                  publ.getPostprints().getPostarchiving()
+                              ).getMessage()
+                           );
+                }
+                catch (IllegalArgumentException ex) {
+                    // Boo.
+                    log.error("Unknown SHERPA/RoMEO permission", ex);
+                    postprintPolicy.addPara(T_ERROR);
+                }
 
                 // One or more lists of postprint conditions
                 List<Postrestrictions> postrestrictionsList = publ.getPostprints().getPostrestrictions();
@@ -351,7 +315,7 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
                         List<Postrestriction> postrestriction = postrestrictions.getPostrestriction();
                         Iterator ipost = postrestriction.iterator();
                         while (ipost.hasNext()) {
-                            Postrestriction post = (Postrestriction) i.next();
+                            Postrestriction post = (Postrestriction) ipost.next();
                             postprintConditions.addItem(post.getvalue());
                         }
                     }
@@ -361,7 +325,7 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
                 List<Condition> conditionList = publ.getConditions().getCondition();
                 if (! conditionList.isEmpty()) {
                     org.dspace.app.xmlui.wing.element.List conditions  = publDivision.addList("conditions");
-                    conditions.setHead("General Conditions");
+                    conditions.setHead(message("xmlui.SherpaRomeo.PolicyViewer.GeneralConditions.title"));
 
                     Iterator ic = conditionList.iterator();
                     while (ic.hasNext()) {
@@ -371,7 +335,7 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
                 }
                 // Paid open access, if any
                 Division paidaccessDiv = publDivision.addDivision("paid-access");
-                paidaccessDiv.setHead("Paid Open Access");
+                paidaccessDiv.setHead(message("xmlui.SherpaRomeo.PolicyViewer.PaidOpenAccess.title"));
                 Para paidaccessPara = paidaccessDiv.addPara();
 
                 String paidaccessName = publ.getPaidaccess().getPaidaccessname().trim();
@@ -380,7 +344,7 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
 
                 if (paidaccessName.isEmpty() && paidaccessURL.isEmpty()
                         && paidaccessNotes.isEmpty()) {
-                    paidaccessPara.addContent("No information is available about paid open-accces options.");
+                    paidaccessPara.addContent(message("xmlui.SherpaRomeo.PolicyViewer.PaidOpenAccess.no_information"));
                 }
                 else {
                     // format a URL
@@ -405,16 +369,16 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
                 }
                 // Copyright
                 Division copyrightDivision = publDivision.addDivision("copyright");
-                copyrightDivision.setHead("Copyright");
+                copyrightDivision.setHead(message("xmlui.SherpaRomeo.PolicyViewer.Copyright.title"));
 
                 List<Copyrightlink> copyrightlinks = publ.getCopyrightlinks().getCopyrightlink();
 
                 if (copyrightlinks.isEmpty()) {
-                    copyrightDivision.addPara("Copyright information is not available.");
+                    copyrightDivision.addPara(message("xmlui.SherpaRomeo.PolicyViewer.Copyright.no_information"));
                 }
                 else {
                     Iterator ic = copyrightlinks.iterator();
-                    Para linksPara = copyrightDivision.addPara();
+                    org.dspace.app.xmlui.wing.element.List linksList = copyrightDivision.addList("copyright-links");
 
                     // @fixme link generation w/ possibly empty text, target repeated
                     while (ic.hasNext()) {
@@ -426,72 +390,26 @@ public class PolicyViewer extends AbstractDSpaceTransformer implements Cacheable
                             continue;
                         }
                         if (crURL.isEmpty()) {
-                            linksPara.addContent(crURL);
+                            linksList.addItem(crText);
                             continue;
                         }
                         if (crText.isEmpty()) {
-                            linksPara.addXref(crURL, crURL);
+                            linksList.addItemXref(crURL, crURL);
                             continue;
                         }
                         
                         // both present then.
-                        linksPara.addXref(crURL, crText);
-
-                        if (ic.hasNext())
-                            linksPara.addContent(", ");
+                        linksList.addItemXref(crURL, crText);
                     }
                 }
                 
                 // Last updated
                 if (! publ.getDateupdated().trim().isEmpty()) {
-                    publDivision.addPara("last-updated", null).addContent("Last updated: " +  publ.getDateupdated().trim());
+                    publDivision.addPara("last-updated", null).addContent(
+                                 message("xmlui.SherpaRomeo.PolicyViewer.Date.updated").parameterize(publ.getDateupdated())
+                            );
                 }
             }
         }
     }
-
-    // @fixme descriptions should be part of the enum
-    private String getPermissionDescription(String permissionText) {
-
-        String permissionDesc;
-
-        try {
-            Permission permission = Permission.valueOf(permissionText);
-        
-            switch (permission) {
-
-                case can:
-                    permissionDesc = "Self-archiving is permitted.";
-                    break;
-
-                case cannot:
-                    permissionDesc = "Self-archiving is not permitted.";
-                    break;
-
-                case restricted:
-                    permissionDesc = "Self-archiving is permitted, subject to the following restrictions.";
-                    break;
-
-                case unclear:
-                    permissionDesc = "Self-archiving permission is unclear.";
-                    break;
-
-                case unknown:
-                    permissionDesc = "Self-archiving permission is unknown.";
-                    break;
-
-                default:
-                    log.error("Unknown SHERPA/RoMEO self-archiving permission");
-                    permissionDesc = "An error has occurred.  Please contact us.";
-            }
-        }
-        catch (IllegalArgumentException ex) {
-            log.error("unknown", ex);
-            permissionDesc = "An error has occurred. Please contact us.";
-        }
-
-        return permissionDesc;
-
-    }
-
 }

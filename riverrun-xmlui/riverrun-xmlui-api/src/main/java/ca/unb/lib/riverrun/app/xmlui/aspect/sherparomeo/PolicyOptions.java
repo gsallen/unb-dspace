@@ -11,7 +11,6 @@ import org.apache.cocoon.caching.CacheableProcessingComponent;
 import org.apache.cocoon.util.HashUtil;
 import org.apache.excalibur.source.SourceValidity;
 import org.apache.log4j.Logger;
-import org.dspace.app.xmlui.cocoon.AbstractDSpaceTransformer;
 import org.dspace.app.xmlui.utils.DSpaceValidity;
 import org.dspace.app.xmlui.utils.HandleUtil;
 import org.dspace.app.xmlui.utils.UIException;
@@ -27,9 +26,10 @@ import org.xml.sax.SAXException;
 
 /**
  * Adds a block of text and links to publishers' self-archiving policies.
- * to all Item views (?showFull = true or ?showFull = false)
+ * to all views (?showFull = true or ?showFull = false) of an Item with a
+ * non-null value in the DC element that stores ISSN data.
  */
-public class PolicyOptions extends AbstractDSpaceTransformer implements CacheableProcessingComponent
+public class PolicyOptions extends SherpaRomeoTransformer implements CacheableProcessingComponent
 {
     private static final Logger log = Logger.getLogger(PolicyOptions.class);
     
@@ -106,13 +106,15 @@ public class PolicyOptions extends AbstractDSpaceTransformer implements Cacheabl
             return;
         Item item = (Item) dso;
 
-        // Add a division for S/R text and links
-        Division division = body.addDivision("policy-options");
-        division.setHead(T_PUBLISHER_POLICIES);
+        if (getItemISSN(item) != null) {
+            // Add a division for S/R text and links
+            Division division = body.addDivision("policy-options");
+            division.setHead(T_PUBLISHER_POLICIES);
 
-        Para showPoliciesPara = division.addPara();
-        String link = contextPath + "/handle/" + item.getHandle() + "/show-policies";
-        showPoliciesPara.addXref(link).addContent(T_SHOW_POLICIES);
+            Para showPoliciesPara = division.addPara();
+            String link = contextPath + "/handle/" + item.getHandle() + "/show-policies";
+            showPoliciesPara.addXref(link).addContent(T_SHOW_POLICIES);
+        }
     }
     
     /**
