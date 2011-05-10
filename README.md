@@ -56,7 +56,7 @@ Link `riverrun-api` and `riverrun-xmlui` projects to DSpace source:
 
 `ln -s [git]/unb-dspace/riverrun-api [dspace-src]/riverrun-api`
 
-`ln -s [git]/unb-dspace/riverrun-api [dspace-src]/riverrun-xmlui`
+`ln -s [git]/unb-dspace/riverrun-xmlui [dspace-src]/riverrun-xmlui`
 
 Copy modified POM files to build RiverRun extensions:
 
