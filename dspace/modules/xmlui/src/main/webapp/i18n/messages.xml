@@ -354,7 +354,7 @@
         <message key="xmlui.SherpaRomeo.PolicyViewer.GeneralConditions.title">General Conditions</message>
         <message key="xmlui.SherpaRomeo.PolicyViewer.PaidOpenAccess.title">Paid Open Access</message>
         <message key="xmlui.SherpaRomeo.PolicyViewer.PaidOpenAccess.no_information">No information is available about paid open-accces options.</message>
-        <message key="xmlui.SherpaRomeo.PolicyViewer.Copyright.title">Copyright</message>
+        <message key="xmlui.SherpaRomeo.PolicyViewer.Copyright.title">Copyright Policies</message>
         <message key="xmlui.SherpaRomeo.PolicyViewer.Copyright.no_information">Copyright information is not available.</message>
         <message key="xmlui.SherpaRomeo.PolicyViewer.Date.updated">Last updated: {0}</message>
 

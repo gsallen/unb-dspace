@@ -30,6 +30,8 @@ import org.dspace.app.xmlui.wing.element.Para;
 import org.dspace.authorize.AuthorizeException;
 import org.dspace.content.DSpaceObject;
 import org.dspace.content.Item;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 import org.xml.sax.SAXException;
 
 /**
@@ -233,7 +235,6 @@ public class PolicyViewer extends SherpaRomeoTransformer implements CacheablePro
             journalDivision.addPara(message("xmlui.SherpaRomeo.PolicyViewer.Publisher.not_found"));
         }
         else {
-            /// journalDivision.addPara("Information found for " + publisherList.size() + " publisher(s).");
             journalDivision.addPara(message("xmlui.SherpaRomeo.PolicyViewer.Publisher.found").parameterize(publisherList.size()));
             
             Iterator i = publisherList.iterator();
@@ -279,7 +280,11 @@ public class PolicyViewer extends SherpaRomeoTransformer implements CacheablePro
                         Iterator ipre = prerestriction.iterator();
                         while (ipre.hasNext()) {
                             Prerestriction pre = (Prerestriction) ipre.next();
-                            preprintConditions.addItem(pre.getvalue());
+                            // Filter indeterminate, escaped XML and HTML
+                            // fragments returned in query
+                            preprintConditions.addItem(
+                                    Jsoup.clean(pre.getvalue(), Whitelist.none())
+                                    );
                         }
                     }
                 }
@@ -316,7 +321,12 @@ public class PolicyViewer extends SherpaRomeoTransformer implements CacheablePro
                         Iterator ipost = postrestriction.iterator();
                         while (ipost.hasNext()) {
                             Postrestriction post = (Postrestriction) ipost.next();
-                            postprintConditions.addItem(post.getvalue());
+
+                            // Filter indeterminate, escaped XML and HTML
+                            // fragments returned in query 
+                            postprintConditions.addItem(
+                                    Jsoup.clean(post.getvalue(), Whitelist.none())
+                                    );
                         }
                     }
                 }
@@ -330,7 +340,12 @@ public class PolicyViewer extends SherpaRomeoTransformer implements CacheablePro
                     Iterator ic = conditionList.iterator();
                     while (ic.hasNext()) {
                         Condition cond = (Condition) ic.next();
-                        conditions.addItem(cond.getvalue());
+
+                        // Filter indeterminate, escaped XML and HTML
+                        // fragments returned in query
+                        conditions.addItem(
+                                Jsoup.clean(cond.getvalue(), Whitelist.none())
+                                );
                     }
                 }
                 // Paid open access, if any
