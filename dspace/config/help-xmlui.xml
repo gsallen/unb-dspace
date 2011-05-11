@@ -184,13 +184,11 @@
 				<div>
 					<head>What is the licence agreement?</head>
 					<p>By uploading a file to <hi rend="italic">RiverRun</hi> you are agreeing to the limited
-						licence allowing UNB to make store an electronic copy of your work, and make it
+						licence allowing UNB to store an electronic copy of your work, and make it
 						available to others over the Internet (unless a non-standard agreement is negotiated in
 						advance).
-						<!-- @todo uncomment and edit path to licence 
-						The text of the default licence may be found 
-						<xref target="/default-license.txt">here</xref>. 
-						-->
+						The text of the default licence may be found
+						<xref target="http://dspace.hil.unb.ca:8080/help/default-license">here</xref>. 
 					</p>
 				</div>
 			</div>

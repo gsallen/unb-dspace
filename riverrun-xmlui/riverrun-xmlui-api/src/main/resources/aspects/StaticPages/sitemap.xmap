@@ -11,7 +11,8 @@
 <map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
     <map:components>
         <map:transformers>
-            <map:transformer name="HelpViewer"  src="ca.unb.lib.riverrun.app.xmlui.aspect.staticpages.HelpViewer"/>
+            <map:transformer name="HelpViewer"           src="ca.unb.lib.riverrun.app.xmlui.aspect.staticpages.HelpViewer"/>
+            <map:transformer name="DefaultLicenseViewer" src="ca.unb.lib.riverrun.app.xmlui.aspect.staticpages.DefaultLicenseViewer"/>
         </map:transformers>
     </map:components>
 
@@ -31,6 +32,12 @@
                     <map:transform type="Include" src="file://{dspace.dir}/config/help-xmlui.xml" />
                 </map:act>
                                 
+                <map:serialize type="xml"/>
+            </map:match>
+
+            <map:match pattern="help/default-license">
+                <!-- Add page metadata, customize trail, display default license -->
+                <map:transform type="DefaultLicenseViewer"/>
                 <map:serialize type="xml"/>
             </map:match>
             
