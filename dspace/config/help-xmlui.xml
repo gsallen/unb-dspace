@@ -128,10 +128,8 @@
 				<div>
 					<head>How do I attach a file to a citation in my collection?</head>
 					<p>We encourage faculty to attach a full-text file of their articles to the citations
-						wherever possible.
-						<!-- @todo uncomment this section & edit link to webcast, when available
-  Instructions on attaching a file can be viewed in this
-      <xref target="/RRFAQ-AddBitstream.mp4">brief webcast</xref>. -->
+						wherever possible.  Instructions on attaching a file can be viewed in this
+                        <xref target="http://dspace.hil.unb.ca:8080/bitstream/handle/1882/19841/RRFAQ-AddBitstream.mp4">brief webcast</xref>.
 						We recommend that faculty covert their files to PDF before uploading, a process made
 						simple on most computers today. </p>
 				</div>
@@ -240,7 +238,8 @@
 &lt;meta name="dc.language" content="en" xml:lang="en" /&gt;&#13;
 &lt;meta name="dc.date.created" content="2011-05-01" xml:lang="en" /&gt;&#13;
 &lt;meta name="dc.date.modfied" content="2011-05-03" xml:lang="en" /&gt;&#13;
-<!-- do not add dc.identifer: it will be generated automatically -->
+&lt;meta name="dc.identifier" content="http://dspace.hil.unb.ca:8080/help" xml:lang="en" /&gt;&#13;
+
             </metadata>
         </pageMeta>
         <repositoryMeta/>
