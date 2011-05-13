@@ -35,8 +35,10 @@
                 <map:serialize type="xml"/>
             </map:match>
 
-            <map:match pattern="help/default-license">
-                <!-- Add page metadata, customize trail, display default license -->
+                <!-- "license" : verb, used in DSpace code -->
+                <!-- "licence" : noun, used in UI -->
+            <map:match pattern="help/default-licence">
+                <!-- Add page metadata, customize trail, display default licence -->
                 <map:transform type="DefaultLicenseViewer"/>
                 <map:serialize type="xml"/>
             </map:match>
