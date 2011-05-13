@@ -21,10 +21,10 @@ public class DefaultLicense extends AbstractDSpaceTransformer implements Cacheab
 
     /** Language strings */
     private static final Message T_DSPACE_HOME = message("xmlui.general.dspace_home");
-    private static final Message T_HELP_TRAIL = message("xmlui.StaticPages.HelpViewer.trail");
-    private static final Message T_TRAIL = message("xmlui.StaticPages.DefaultLicense.trail");
-    private static final Message T_TITLE = message("xmlui.StaticPages.DefaultLicense.title");
-    private static final Message T_ABOUT = message("xmlui.StaticPages.DefaultLicense.about");        
+    private static final Message T_HELP_TRAIL = message("xmlui.RiverRunArtifactBrowser.HelpViewer.trail");
+    private static final Message T_TRAIL = message("xmlui.RiverRunArtifactBrowser.DefaultLicense.trail");
+    private static final Message T_TITLE = message("xmlui.RiverRunArtifactBrowser.DefaultLicense.title");
+    private static final Message T_ABOUT = message("xmlui.RiverRunArtifactBrowser.DefaultLicense.about");
 
 
     /**

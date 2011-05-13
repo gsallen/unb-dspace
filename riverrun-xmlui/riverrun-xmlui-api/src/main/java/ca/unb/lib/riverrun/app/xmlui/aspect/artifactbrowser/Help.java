@@ -18,8 +18,8 @@ public class Help extends AbstractDSpaceTransformer implements CacheableProcessi
 
     /** Language strings */
     private static final Message T_DSPACE_HOME = message("xmlui.general.dspace_home");
-    private static final Message T_TRAIL = message("xmlui.StaticPages.HelpViewer.trail");
-    private static final Message T_TITLE = message("xmlui.StaticPages.HelpViewer.title");
+    private static final Message T_TRAIL = message("xmlui.RiverRunArtifactBrowser.HelpViewer.trail");
+    private static final Message T_TITLE = message("xmlui.RiverRunArtifactBrowser.HelpViewer.title");
 
     /**
      * Generate the unique caching key.
