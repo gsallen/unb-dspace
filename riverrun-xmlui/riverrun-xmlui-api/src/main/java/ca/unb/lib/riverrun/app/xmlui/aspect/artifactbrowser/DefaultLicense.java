@@ -1,4 +1,4 @@
-package ca.unb.lib.riverrun.app.xmlui.aspect.staticpages;
+package ca.unb.lib.riverrun.app.xmlui.aspect.artifactbrowser;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -17,7 +17,7 @@ import org.dspace.authorize.AuthorizeException;
 import org.dspace.core.ConfigurationManager;
 import org.xml.sax.SAXException;
 
-public class DefaultLicenseViewer extends AbstractDSpaceTransformer implements CacheableProcessingComponent {
+public class DefaultLicense extends AbstractDSpaceTransformer implements CacheableProcessingComponent {
 
     /** Language strings */
     private static final Message T_DSPACE_HOME = message("xmlui.general.dspace_home");

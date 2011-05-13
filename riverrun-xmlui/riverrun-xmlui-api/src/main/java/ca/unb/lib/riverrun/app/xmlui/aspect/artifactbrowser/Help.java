@@ -1,4 +1,4 @@
-package ca.unb.lib.riverrun.app.xmlui.aspect.staticpages;
+package ca.unb.lib.riverrun.app.xmlui.aspect.artifactbrowser;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -14,7 +14,7 @@ import org.dspace.app.xmlui.wing.element.PageMeta;
 import org.dspace.authorize.AuthorizeException;
 import org.xml.sax.SAXException;
 
-public class HelpViewer extends AbstractDSpaceTransformer implements CacheableProcessingComponent {
+public class Help extends AbstractDSpaceTransformer implements CacheableProcessingComponent {
 
     /** Language strings */
     private static final Message T_DSPACE_HOME = message("xmlui.general.dspace_home");
