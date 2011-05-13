@@ -60,9 +60,6 @@ public class DefaultLicenseViewer extends AbstractDSpaceTransformer implements C
     @Override
     public void addBody(Body body) throws SAXException, WingException,
             UIException, SQLException, IOException, AuthorizeException {
-        
-        //
-
 
         // Explain a bit about the license
         Division preamble = body.addDivision("default-license");
