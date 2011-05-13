@@ -95,7 +95,7 @@ Run Maven:
 
 Copy `[dspace-src]/dspace/profiles-example.xml` to `[dspace-src]/dspace/profiles.xml`.  Edit connection details; Maven will pick up `profiles.xml` automatically.
 
-## RiverRun Ant tasks
+## Ant tasks
 
 Run Maven, as usual:
 
@@ -103,8 +103,14 @@ Run Maven, as usual:
 
 `mvn package -Dconfigure-dspace=true`
 
-Get a list of RiverRun-specific tasks:
+Get a list of DSpace ant tasks:
 
 `cd [dspace-src]/dspace/target/[build-dir]`
+
+`ant`
+
+When running `ant update_configs`, add `-Doverwrite=true` to back up & overwrite existing config files. Otherwise, the task will leave existing config files alone, and will copy updated config files as [file].new versions.
+
+Get a list of RiverRun-specific tasks:
 
 `ant -f build-riverrun.xml`
