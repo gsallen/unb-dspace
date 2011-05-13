@@ -4,6 +4,8 @@ Themes & other customizations for UNB's implementation of the DSpace repository.
 
 ## Set up development environment
 
+The SHERPA/RoMEO aspect uses JAXB 2.0 which is distributed with Java 6, and requires Java 5 as a minimum version.
+
 Clone appropriate branch of the repo: `[git]/unb-dspace`
 
 Fetch DSpace source release: `[dspace-src]`
